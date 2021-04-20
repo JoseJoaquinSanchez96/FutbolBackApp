@@ -3,6 +3,7 @@ package com.antartyca.proyecto.services;
 import java.util.List;
 
 import com.antartyca.proyecto.model.JugadorModel;
+import com.antartyca.proyecto.model.JugadorSearchRequestModel;
 
 /*
  * Authors: Eduardo Fachal and Aitor Gonzalez
@@ -17,4 +18,6 @@ public interface JugadorService {
 	public List<JugadorModel> getByFilter(JugadorModel filter);
 	public JugadorModel updatePlayer(JugadorModel jugador);
 	public void deleteById(Integer id);
+	
+	List<JugadorModel> searchPlayer(JugadorSearchRequestModel jugadorSearchRequestModel);
 }

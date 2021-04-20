@@ -3,9 +3,9 @@ package com.antartyca.proyecto.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,15 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.antartyca.proyecto.model.EquipoModel;
 import com.antartyca.proyecto.model.JugadorModel;
+import com.antartyca.proyecto.model.JugadorSearchRequestModel;
 import com.antartyca.proyecto.services.JugadorService;
 
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
 
 /*
  * Authors: Eduardo Fachal and Aitor Gonzalez
@@ -29,8 +27,8 @@ import io.swagger.annotations.ApiResponse;
  * 
  */
 
-@RestController
 @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
+@RestController
 @RequestMapping( value = "/jugador")
 public class JugadorController {
 	
@@ -67,4 +65,17 @@ public class JugadorController {
 	public JugadorModel updatePlayer(@RequestBody JugadorModel jugador){
 		return jugadorServ.updatePlayer(jugador);
 	}
+	
+	@ApiOperation(value="SEARCH PLAYERS")
+	@PostMapping( value="/search",
+			      consumes=MediaType.APPLICATION_JSON_VALUE,
+			      produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<JugadorModel>> searchPersons( @RequestBody JugadorSearchRequestModel jugadorSearchRequestModel ) {
+		List<JugadorModel> jugadores = jugadorServ.searchPlayer(jugadorSearchRequestModel);
+		
+		//Nos devuelve la lista de los jugadores encontrados y el OK del servidor
+		return new ResponseEntity<List<JugadorModel>>( jugadores , HttpStatus.OK); 
+	}
+	
+	
 }
