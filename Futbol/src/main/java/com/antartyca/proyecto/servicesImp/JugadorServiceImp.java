@@ -176,11 +176,11 @@ public class JugadorServiceImp implements JugadorService {
 			searchCriterias.add(criteriaBuilder.equal(root.get("telefono"), telefono));
 		}
 						
-		if ((goles>=0)) {
+		if ((goles!=0)) {
 
 			searchCriterias.add(criteriaBuilder.equal(root.get("goles"), goles));
 		}
-		if ((altura>=150)) {
+		if ((altura!=0)) {
 
 			searchCriterias.add(criteriaBuilder.equal(root.get("altura"), altura));
 		}
