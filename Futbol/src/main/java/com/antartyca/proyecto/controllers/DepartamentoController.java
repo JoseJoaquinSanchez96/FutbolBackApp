@@ -21,8 +21,8 @@ import com.antartyca.proyecto.services.DepartamentoService;
  * 
  */
 
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
 @RestController
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
 @RequestMapping( value = "/departamento")
 public class DepartamentoController {
 	
@@ -50,7 +50,7 @@ public class DepartamentoController {
 		return departamentoServ.getByFilter(departamento);
 	}
 	
-	@GetMapping(value = "/borrar/{id}")
+	@GetMapping(value = "/delete/{id}")
 	public void deleteById(@PathVariable("id") Integer id){
 		departamentoServ.deleteById(id);
 	}

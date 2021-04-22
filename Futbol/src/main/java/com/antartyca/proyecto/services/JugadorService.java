@@ -1,5 +1,6 @@
 package com.antartyca.proyecto.services;
 
+import java.sql.Date;
 import java.util.List;
 
 import com.antartyca.proyecto.model.JugadorModel;
@@ -19,9 +20,12 @@ public interface JugadorService {
 	public JugadorModel updatePlayer(JugadorModel jugador);
 	public void deleteById(Integer id);
 	
-	List<JugadorModel> searchPlayer(JugadorSearchRequestModel jugadorSearchRequestModel);
-	//public List<JugadorModel> busquedaPorGoles(int goles);
+	public List<JugadorModel> searchPlayer(JugadorSearchRequestModel jugadorSearchRequestModel);
 	
-	List<JugadorModel> buscarPorPuestoYGoles(String puesto, int goles);
+	public List<JugadorModel> buscarPorPuestoYGoles(String puesto, int goles);
+	public List<JugadorModel> busquedaPorGoles(int goles);
+	
+	public List<JugadorModel> filtrarPorAltura(int alturaIn, int alturaFin);
+	public List<JugadorModel> buscarEntreFechas(Date fechaIn, Date fechaFin);
 	
 }

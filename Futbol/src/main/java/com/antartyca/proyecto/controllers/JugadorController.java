@@ -1,21 +1,29 @@
 package com.antartyca.proyecto.controllers;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.antartyca.proyecto.model.EquipoModel;
 import com.antartyca.proyecto.model.JugadorModel;
 import com.antartyca.proyecto.model.JugadorSearchRequestModel;
 import com.antartyca.proyecto.services.JugadorService;
@@ -28,17 +36,31 @@ import io.swagger.annotations.ApiOperation;
  * 
  */
 
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
+
 @RestController
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
 @RequestMapping( value = "/jugador")
 public class JugadorController {
+	
 	
 	@Autowired
 	JugadorService jugadorServ;
 		
-	@RequestMapping(method =  RequestMethod.POST , value = "/save")
+	/*@PostMapping( value = "/save")
 	public JugadorModel savePlayer(@RequestBody JugadorModel jugador) {
+		System.out.println(jugador.getNombre());
+		if(jugador.getCod_jugador()==null) {
+				int cod = jugadorServ.getAllPlayers().get(jugadorServ.getAllPlayers().size()).getCod_jugador();
+				jugador.setCod_jugador(cod);
+		}
+	
 		return jugadorServ.savePlayer(jugador);
+		
+	}*/
+	@PostMapping( value = "/save")
+	public ResponseEntity<JugadorModel> savePlayer(@RequestBody JugadorModel jugador) {
+		jugadorServ.savePlayer(jugador);
+		return  new ResponseEntity<JugadorModel>(HttpStatus.OK); 
 		
 	}
 	
@@ -57,7 +79,7 @@ public class JugadorController {
 		return jugadorServ.getByFilter(jugador);
 	}
 	
-	@GetMapping(value = "/borrar/{id}")
+	@RequestMapping(value = "/delete/{id}" , method =  RequestMethod.GET )
 	public void deleteById(@PathVariable("id") Integer id){
 		jugadorServ.deleteById(id);
 	}
@@ -78,6 +100,7 @@ public class JugadorController {
 		return new ResponseEntity<List<JugadorModel>>( jugadores , HttpStatus.OK); 
 	}
 	
+	//Consulta CriteriaQuery
 	@GetMapping(value = "/buscarPorPuestoYGoles/{puesto}/{goles}")
 	public List<JugadorModel> buscarPuestoGoles(@PathVariable(value = "puesto") String puesto,@PathVariable(value = "goles") int goles){
 		List <JugadorModel> jugadores = new ArrayList<JugadorModel>();
@@ -85,11 +108,31 @@ public class JugadorController {
 		jugadores = jugadorServ.buscarPorPuestoYGoles(puesto, goles);
 		return jugadores;
 	}
-
-	/*
-	@GetMapping(value = "/search/{goles}")
-	public void busquedaPorGoles(@PathVariable("goles") Integer goles){
-		jugadorServ.busquedaPorGoles(goles);
+	
+	//Consulta CriteriaQuery
+	@GetMapping(value = "/buscarEntreFechas/{fechaIn}/{fechaFin}")
+	public List<JugadorModel> buscarEntreFechas(@PathVariable(value = "fechaIn") Date fechaIn,@PathVariable(value = "fechaFin") Date fechaFin){
+		List <JugadorModel> jugadores = new ArrayList<JugadorModel>();
+		
+		jugadores = jugadorServ.buscarEntreFechas(fechaIn, fechaFin);
+		return jugadores;
 	}
-	*/
+	
+	//Consulta JPQL
+	@GetMapping(value = "/busquedaPorGoles/{goles}")
+	public List<JugadorModel> busquedaPorGoles(@PathVariable(value = "goles") int goles){
+		List <JugadorModel> jugadores = new ArrayList<JugadorModel>();
+		
+		jugadores = jugadorServ.busquedaPorGoles(goles);
+		return jugadores;
+	}
+	
+	//Consulta JPQL
+	@GetMapping(value = "/filtrarPorAltura/{alturaIn}/{alturaFin}")
+	public List<JugadorModel> filtrarPorAltura(@PathVariable(value = "alturaIn") int alturaIn,@PathVariable(value = "alturaFin") int alturaFin){
+		List <JugadorModel> jugadores = new ArrayList<JugadorModel>();
+		
+		jugadores = jugadorServ.filtrarPorAltura(alturaIn, alturaFin);
+		return jugadores;
+	}
 }

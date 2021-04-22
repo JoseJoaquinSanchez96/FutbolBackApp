@@ -1,6 +1,7 @@
 package com.antartyca.proyecto.servicesImp;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.antartyca.proyecto.model.EquipoModel;
+import com.antartyca.proyecto.model.JugadorModel;
 import com.antartyca.proyecto.repository.EquipoRepository;
 import com.antartyca.proyecto.services.EquipoService;
 
@@ -27,12 +29,9 @@ public class EquipoServiceImp implements EquipoService{
 	public EquipoModel saveTeam(EquipoModel equipo) {
 		EquipoModel result = new EquipoModel();
 		try {
+			equipo.setCod_equipo(equipoRepo.getNextSeriesId());
+			equipo.setJugadores(new ArrayList<JugadorModel>());
 			result = equipoRepo.save(equipo);
-		/*	List<JugadorModel> jugadores=(List<JugadorModel>) result.getJugadores();
-			jugadores.get(0).setEquipo(equipo);
-			System.out.println(jugadores.get(0).toString());
-			System.out.println(jugadores.get(1).toString());
-			System.out.println(jugadores.get(2).toString());*/
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}

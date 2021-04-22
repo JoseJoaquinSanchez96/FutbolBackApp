@@ -47,6 +47,7 @@ public class EquipoModel {
 	@OneToMany(cascade=CascadeType.ALL/*,mappedBy="equipo"*/)
 	@JsonIgnoreProperties("equipo")
 	@JoinColumn(name="cod_equipo")
+	@Column(nullable = false)
 	private List<JugadorModel> jugadores;
 	
 	@ManyToMany(cascade = CascadeType.ALL)

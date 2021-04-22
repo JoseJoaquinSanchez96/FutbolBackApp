@@ -1,7 +1,9 @@
 package com.antartyca.proyecto.servicesImp;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -207,6 +209,7 @@ public class JugadorServiceImp implements JugadorService {
 
 	}
 
+	// Consulta CriteriaQuery
 	public List<JugadorModel> buscarPorPuestoYGoles(String puesto, int goles) {
 
 		// Creamos el builder
@@ -217,45 +220,52 @@ public class JugadorServiceImp implements JugadorService {
 
 		// Creamos el root
 		Root<JugadorModel> root = criteriaQuery.from(JugadorModel.class);
-		
-		criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("puesto"), puesto), criteriaBuilder.equal(root.get("goles"), goles));
-		
+
+		criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("puesto"), puesto),
+				criteriaBuilder.equal(root.get("goles"), goles));
+
 		TypedQuery<JugadorModel> q = em.createQuery(criteriaQuery);
-		
+
 		return q.getResultList();
 	}
 
+	// builder.between(rootObjeto.get(Objeto_.fecha), fechaInicio, fechaFin);
 
-	/*
-	 * public void selectAllPlayers() {
-	 * 
-	 * EntityManager em = emf.createEntityManager(); em.getTransaction().begin();
-	 * 
-	 * Query q =
-	 * em.createNativeQuery("SELECT a.nombre, a.puesto from JugadorModel a");
-	 * List<Object[]> jugadores = q.getResultList();
-	 * 
-	 * for (Object[] a : jugadores) {
-	 * 
-	 * Log.info("Jugador " + a[0] + " " + a[1]);
-	 * 
-	 * }
-	 * 
-	 * em.getTransaction().commit(); em.close(); }
-	 */
+	// Consulta CriteriaQuery
+	public List<JugadorModel> buscarEntreFechas(Date fechaIn, Date fechaFin) {
 
-	/*
-	@Override
+		// Creamos el builder
+		CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+
+		// Creamos la query
+		CriteriaQuery<JugadorModel> criteriaQuery = criteriaBuilder.createQuery(JugadorModel.class);
+
+		// Creamos el root
+		Root<JugadorModel> root = criteriaQuery.from(JugadorModel.class);
+
+		criteriaQuery.select(root).where(criteriaBuilder.between(root.get("fecha_nacimiento"), fechaIn, fechaFin));
+
+		TypedQuery<JugadorModel> q = em.createQuery(criteriaQuery);
+
+		return q.getResultList();
+	}
+
+	// Consulta JPQL
 	public List<JugadorModel> busquedaPorGoles(int goles) {
 
-		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("JPA_PU");
-		EntityManager entitymanager = emfactory.createEntityManager();
-
-		// Between
-		Query query = entitymanager
-				.createQuery("Select j " + "from JugadorModel e " + "where j.goles " + "Between 5 and 50");
-		List<JugadorModel> jugadores = (List<JugadorModel>) query.getResultList();
-		return jugadores;
+		TypedQuery<JugadorModel> query = em
+				.createQuery("SELECT j from JugadorModel j where j.goles >= '" + goles + "' ", JugadorModel.class);
+		List<JugadorModel> golesJugadores = query.getResultList();
+		return golesJugadores;
 	}
-	*/
+
+	// Consulta JPQL con dos parametros
+	public List<JugadorModel> filtrarPorAltura(int alturaIn, int alturaFin) {
+
+		TypedQuery<JugadorModel> q = em.createQuery("SELECT j from JugadorModel j where j.altura >= '" + alturaIn
+				+ "' AND j.altura <= '" + alturaFin + "' ", JugadorModel.class);
+		List<JugadorModel> activoAlturaJugadores = q.getResultList();
+		return activoAlturaJugadores;
+	}
+
 }

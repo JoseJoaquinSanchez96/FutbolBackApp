@@ -39,7 +39,7 @@ public class FederacionModel {
 	
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="cod_federacion")
-	//@JsonIgnoreProperties("departamentos")
+	@Column(nullable = false)
 	@JsonIgnoreProperties("federaciones")
 	private List<DepartamentoModel> departamentos;
 

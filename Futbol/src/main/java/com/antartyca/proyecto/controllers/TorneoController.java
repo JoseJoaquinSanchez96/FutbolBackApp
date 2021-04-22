@@ -21,8 +21,8 @@ import com.antartyca.proyecto.services.TorneoService;
  * 
  */
 
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
 @RestController
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
 @RequestMapping( value = "/torneo")
 public class TorneoController {
 
@@ -45,7 +45,7 @@ public class TorneoController {
 		return torneoServ.getById(id);
 	}
 	
-	@GetMapping(value = "/borrar/{id}")
+	@GetMapping(value = "/delete/{id}")
 	public void deleteById(@PathVariable("id") Integer id){
 		torneoServ.deleteById(id);
 	}

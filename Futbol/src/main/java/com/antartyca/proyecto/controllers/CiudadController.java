@@ -22,8 +22,9 @@ import com.antartyca.proyecto.services.CiudadService;
  * 
  */
 
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
+
 @RestController
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
 @RequestMapping( value = "/ciudad")
 public class CiudadController {
 
@@ -52,7 +53,7 @@ public class CiudadController {
 		return ciudadServ.getByFilter(ciudad);
 	}
 	
-	@GetMapping(value = "/borrar/{id}")
+	@GetMapping(value = "/delete/{id}")
 	public void deleteById(@PathVariable("id") Integer id){
 		ciudadServ.deleteById(id);
 	}

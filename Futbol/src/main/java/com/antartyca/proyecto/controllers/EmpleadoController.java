@@ -3,6 +3,7 @@ package com.antartyca.proyecto.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import com.antartyca.proyecto.services.EmpleadoService;
  */
 
 @RestController
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
 @RequestMapping( value = "/empleado")
 public class EmpleadoController {
 	
@@ -48,7 +50,7 @@ public class EmpleadoController {
 		return empleadoServ.getByFilter(empleado);
 	}
 	
-	@GetMapping(value = "/borrar/{id}")
+	@GetMapping(value = "/delete/{id}")
 	public void deleteById(@PathVariable("id") Integer id){
 		empleadoServ.deleteById(id);
 	}

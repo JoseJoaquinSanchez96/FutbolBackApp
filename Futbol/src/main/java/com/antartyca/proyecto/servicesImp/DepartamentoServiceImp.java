@@ -28,6 +28,7 @@ public class DepartamentoServiceImp implements DepartamentoService{
 	public DepartamentoModel saveDepartment(DepartamentoModel depart) {
 		DepartamentoModel result = new DepartamentoModel();
 		try {
+			depart.setCod_depart(departamentoRepo.getNextSeriesId());
 			result = departamentoRepo.save(depart);
 		}catch(Exception ex) {
 			ex.printStackTrace();

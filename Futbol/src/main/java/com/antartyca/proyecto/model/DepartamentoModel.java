@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -25,7 +26,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class DepartamentoModel {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="departamento_seq")
+	@SequenceGenerator(name="departamento_seq")
 	private Integer cod_depart;
 	
 	@Column
@@ -42,6 +44,7 @@ public class DepartamentoModel {
 		
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="cod_depart")
+	@Column(nullable = false)
 	@JsonIgnoreProperties("departamentos")
 	private List<EmpleadoModel> empleados;
 	

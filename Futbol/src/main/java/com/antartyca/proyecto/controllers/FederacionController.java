@@ -21,8 +21,8 @@ import com.antartyca.proyecto.services.FederacionService;
  * 
  */
 
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
 @RestController
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
 @RequestMapping( value = "/federacion")
 public class FederacionController {
 
@@ -35,7 +35,7 @@ public class FederacionController {
 
     }
 
-    @RequestMapping(value = "/federaciones")
+    @GetMapping(value = "/federaciones")
     public List<FederacionModel> getAllEquipos(){
         return federacionServ.getAllFederations();
     }
@@ -50,7 +50,7 @@ public class FederacionController {
 		return federacionServ.getByFilter(federacion);
 	}
 
-    @GetMapping(value = "/borrar/{id}")
+    @GetMapping(value = "/delete/{id}")
     public void deleteById(@PathVariable("id") Integer id){
     	federacionServ.deleteById(id);
     }

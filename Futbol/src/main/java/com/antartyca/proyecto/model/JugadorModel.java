@@ -1,5 +1,6 @@
 package com.antartyca.proyecto.model;
 
+import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.*;
+
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -45,21 +46,25 @@ public class JugadorModel {
 	@JsonProperty(value ="puesto")
 	private String puesto;
 	
-	@Column
+	@Column(nullable = false)
 	@JsonProperty(value ="goles")
-	private int goles;
+	private Integer goles;
 	
-	@Column
+	@Column(nullable = false)
 	@JsonProperty(value ="altura")
-	private int altura;
+	private Integer altura;
 	
 	@Column
+	@JsonProperty(value ="fecha_nacimiento")
+	private Date fecha_nacimiento;
+	
+	@Column(nullable = false)
 	@JsonProperty(value ="tarjetas")
-	private int tarjetas;
+	private Integer tarjetas;
 	
-	@Column
+	@Column(nullable = false)
 	@JsonProperty(value ="activo")
-	private boolean activo = true;
+	private Boolean activo = true;
 	
 	@ManyToOne//(cascade = CascadeType.ALL)
 	@JoinColumn(name="cod_equipo")
@@ -70,23 +75,11 @@ public class JugadorModel {
 		
 	}
 	
-	public JugadorModel(String nom, String tlf, String puest, int gol, int alt, int tarj, boolean act, EquipoModel equi) {
+	public JugadorModel(String nom, String tlf, String puest, EquipoModel equi) {
 		this.nombre = nom;
 		this.telefono  = tlf;
 		this.puesto = puest;
 		this.equipo = equi;
-		this.goles = gol;
-		this.altura = alt;
-		this.tarjetas = tarj;
-		this.activo = act;
-	}
-
-	public boolean isActivo() {
-		return activo;
-	}
-
-	public void setActivo(boolean activo) {
-		this.activo = activo;
 	}
 
 	public Integer getCod_jugador() {
@@ -128,7 +121,7 @@ public class JugadorModel {
 	public void setEquipo(EquipoModel equipo) {
 		this.equipo = equipo;
 	}
-
+	
 	public int getGoles() {
 		return goles;
 	}
@@ -153,12 +146,29 @@ public class JugadorModel {
 		this.tarjetas = tarjetas;
 	}
 
+	public boolean isActivo() {
+		return activo;
+	}
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
+
+	public Date getFecha_nacimiento() {
+		return fecha_nacimiento;
+	}
+
+	public void setFecha_nacimiento(Date fecha_nacimiento) {
+		this.fecha_nacimiento = fecha_nacimiento;
+	}
+
 	@Override
 	public String toString() {
 		return "JugadorModel [cod_jugador=" + cod_jugador + ", nombre=" + nombre + ", telefono=" + telefono
-				+ ", puesto=" + puesto + ", goles=" + goles + ", altura=" + altura + ", tarjetas=" + tarjetas
-				+ ", equipo=" + equipo + "]";
+				+ ", puesto=" + puesto + ", goles=" + goles + ", altura=" + altura + ", fecha_nacimiento="
+				+ fecha_nacimiento + ", tarjetas=" + tarjetas + ", activo=" + activo + ", equipo=" + equipo + "]";
 	}
 
+	
 	
 }

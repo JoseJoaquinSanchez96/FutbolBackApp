@@ -77,6 +77,12 @@ public class FederacionServiceImp implements FederacionService{
 				if(federacion.getDireccion()!= null){
 					result.setDireccion(federacion.getDireccion());
 				}
+				if(federacion.getCif()!= null){
+					result.setCif(federacion.getCif());
+				}
+				if(federacion.getTelefono()!= null){
+					result.setTelefono(federacion.getTelefono());
+				}
 				result = federacionRepo.save(result);
 			}
 			
