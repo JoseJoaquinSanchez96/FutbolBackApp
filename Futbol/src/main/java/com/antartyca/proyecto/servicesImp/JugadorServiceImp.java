@@ -7,6 +7,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.Predicate;
 
 import javax.transaction.Transactional;
@@ -20,6 +24,8 @@ import com.antartyca.proyecto.repository.JugadorRepository;
 import com.antartyca.proyecto.model.JugadorSearchRequestModel;
 import com.antartyca.proyecto.services.JugadorService;
 
+import jdk.internal.org.jline.utils.Log;
+
 /*
  * Authors: Eduardo Fachal and Aitor Gonzalez
  * Date: 21/3/2021
@@ -32,9 +38,9 @@ public class JugadorServiceImp implements JugadorService {
 
 	@Autowired
 	JugadorRepository jugadorRepo;
-	
+
 	@Autowired
-	EntityManager em; //Creamos el entity manager, necesario para las consultas CriteriaQuery
+	EntityManager em; // Creamos el entity manager, necesario para las consultas CriteriaQuery
 
 	@Override
 	public JugadorModel savePlayer(JugadorModel jugador) {
@@ -129,22 +135,23 @@ public class JugadorServiceImp implements JugadorService {
 		}
 
 	}
-	
+
 	/**
-	 * Metodo para buscar jugadores por distintos filtros, por ejemplo el codigo, el nombre, la altura, posicion..
+	 * Metodo para buscar jugadores por distintos filtros, por ejemplo el codigo, el
+	 * nombre, la altura, posicion..
 	 */
 	public List<JugadorModel> searchPlayer(JugadorSearchRequestModel jugadorSearchRequestModel) {
-			
-		//Creamos el builder
+
+		// Creamos el builder
 		CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-		
-		//Creamos la query
+
+		// Creamos la query
 		CriteriaQuery<JugadorModel> criteriaQuery = criteriaBuilder.createQuery(JugadorModel.class);
-		
-		//Creamos el root
+
+		// Creamos el root
 		Root<JugadorModel> root = criteriaQuery.from(JugadorModel.class);
-		
-		//Creamos y obtenemos el valor de las variables
+
+		// Creamos y obtenemos el valor de las variables
 		int cod_jugador = jugadorSearchRequestModel.getCod_jugador();
 		String nombre = jugadorSearchRequestModel.getNombre();
 		String puesto = jugadorSearchRequestModel.getPuesto();
@@ -152,16 +159,16 @@ public class JugadorServiceImp implements JugadorService {
 		int goles = jugadorSearchRequestModel.getGoles();
 		int altura = jugadorSearchRequestModel.getAltura();
 		int tarjetas = jugadorSearchRequestModel.getTarjetas();
-		boolean activo = true;
-		
-		//Creamos una lista de predicados para guardar ahi el filtrado
+		boolean activo = jugadorSearchRequestModel.isActivo();
+
+		// Creamos una lista de predicados para guardar ahi el filtrado
 		List<Predicate> searchCriterias = new ArrayList<>();
-		
-		if((cod_jugador>0)) {
-			
+
+		if ((cod_jugador > 0)) {
+
 			searchCriterias.add(criteriaBuilder.equal(root.get("cod_jugador"), cod_jugador));
 		}
-		
+
 		if ((nombre != "") && (nombre != null)) {
 
 			searchCriterias.add(criteriaBuilder.equal(root.get("nombre"), nombre));
@@ -170,29 +177,85 @@ public class JugadorServiceImp implements JugadorService {
 
 			searchCriterias.add(criteriaBuilder.equal(root.get("puesto"), puesto));
 		}
-		
+
 		if ((telefono != "") && (telefono != null)) {
 
 			searchCriterias.add(criteriaBuilder.equal(root.get("telefono"), telefono));
 		}
-						
-		if ((goles!=0)) {
+
+		if ((goles != 0)) {
 
 			searchCriterias.add(criteriaBuilder.equal(root.get("goles"), goles));
 		}
-		if ((altura!=0)) {
+		if ((altura != 0)) {
 
 			searchCriterias.add(criteriaBuilder.equal(root.get("altura"), altura));
 		}
 		if (activo) {
 
 			searchCriterias.add(criteriaBuilder.equal(root.get("activo"), activo));
+		} else {
+
+			jugadorSearchRequestModel.setActivo(false);
+
+			searchCriterias.add(criteriaBuilder.equal(root.get("activo"), activo));
 		}
-		
+
 		criteriaQuery.select(root)
 				.where(criteriaBuilder.and(searchCriterias.toArray(new Predicate[searchCriterias.size()])));
-		return em.createQuery(criteriaQuery).getResultList();	
-		
+		return em.createQuery(criteriaQuery).getResultList();
+
 	}
 
+	public List<JugadorModel> buscarPorPuestoYGoles(String puesto, int goles) {
+
+		// Creamos el builder
+		CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+
+		// Creamos la query
+		CriteriaQuery<JugadorModel> criteriaQuery = criteriaBuilder.createQuery(JugadorModel.class);
+
+		// Creamos el root
+		Root<JugadorModel> root = criteriaQuery.from(JugadorModel.class);
+		
+		criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("puesto"), puesto), criteriaBuilder.equal(root.get("goles"), goles));
+		
+		TypedQuery<JugadorModel> q = em.createQuery(criteriaQuery);
+		
+		return q.getResultList();
+	}
+
+
+	/*
+	 * public void selectAllPlayers() {
+	 * 
+	 * EntityManager em = emf.createEntityManager(); em.getTransaction().begin();
+	 * 
+	 * Query q =
+	 * em.createNativeQuery("SELECT a.nombre, a.puesto from JugadorModel a");
+	 * List<Object[]> jugadores = q.getResultList();
+	 * 
+	 * for (Object[] a : jugadores) {
+	 * 
+	 * Log.info("Jugador " + a[0] + " " + a[1]);
+	 * 
+	 * }
+	 * 
+	 * em.getTransaction().commit(); em.close(); }
+	 */
+
+	/*
+	@Override
+	public List<JugadorModel> busquedaPorGoles(int goles) {
+
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("JPA_PU");
+		EntityManager entitymanager = emfactory.createEntityManager();
+
+		// Between
+		Query query = entitymanager
+				.createQuery("Select j " + "from JugadorModel e " + "where j.goles " + "Between 5 and 50");
+		List<JugadorModel> jugadores = (List<JugadorModel>) query.getResultList();
+		return jugadores;
+	}
+	*/
 }

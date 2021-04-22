@@ -9,10 +9,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
+import javax.persistence.*;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /*
  * Authors: Eduardo Fachal and Aitor Gonzalez
@@ -29,28 +30,36 @@ public class JugadorModel {
 	@Column(name="cod_jugador")
 	@SequenceGenerator(sequenceName="jugadores_sequen" , name="jugador_seq")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="jugador_seq")
+	@JsonProperty(value ="cod_jugador")
 	private int cod_jugador;
 	
 	@Column
+	@JsonProperty(value ="nombre")
 	private String nombre;
 	
 	@Column
+	@JsonProperty(value ="telefono")
 	private String telefono;
 	
 	@Column
+	@JsonProperty(value ="puesto")
 	private String puesto;
 	
 	@Column
+	@JsonProperty(value ="goles")
 	private int goles;
 	
 	@Column
+	@JsonProperty(value ="altura")
 	private int altura;
 	
 	@Column
+	@JsonProperty(value ="tarjetas")
 	private int tarjetas;
 	
 	@Column
-	private boolean activo;
+	@JsonProperty(value ="activo")
+	private boolean activo = true;
 	
 	@ManyToOne//(cascade = CascadeType.ALL)
 	@JoinColumn(name="cod_equipo")

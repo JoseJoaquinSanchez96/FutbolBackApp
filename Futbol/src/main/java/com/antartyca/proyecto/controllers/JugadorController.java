@@ -1,5 +1,6 @@
 package com.antartyca.proyecto.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,5 +78,18 @@ public class JugadorController {
 		return new ResponseEntity<List<JugadorModel>>( jugadores , HttpStatus.OK); 
 	}
 	
-	
+	@GetMapping(value = "/buscarPorPuestoYGoles/{puesto}/{goles}")
+	public List<JugadorModel> buscarPuestoGoles(@PathVariable(value = "puesto") String puesto,@PathVariable(value = "goles") int goles){
+		List <JugadorModel> jugadores = new ArrayList<JugadorModel>();
+		
+		jugadores = jugadorServ.buscarPorPuestoYGoles(puesto, goles);
+		return jugadores;
+	}
+
+	/*
+	@GetMapping(value = "/search/{goles}")
+	public void busquedaPorGoles(@PathVariable("goles") Integer goles){
+		jugadorServ.busquedaPorGoles(goles);
+	}
+	*/
 }

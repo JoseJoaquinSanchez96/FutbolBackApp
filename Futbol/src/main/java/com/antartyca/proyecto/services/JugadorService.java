@@ -20,4 +20,8 @@ public interface JugadorService {
 	public void deleteById(Integer id);
 	
 	List<JugadorModel> searchPlayer(JugadorSearchRequestModel jugadorSearchRequestModel);
+	//public List<JugadorModel> busquedaPorGoles(int goles);
+	
+	List<JugadorModel> buscarPorPuestoYGoles(String puesto, int goles);
+	
 }
