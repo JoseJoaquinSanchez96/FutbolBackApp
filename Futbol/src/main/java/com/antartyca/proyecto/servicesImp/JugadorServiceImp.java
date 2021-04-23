@@ -19,6 +19,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.antartyca.proyecto.model.JugadorModel;
@@ -229,8 +230,6 @@ public class JugadorServiceImp implements JugadorService {
 		return q.getResultList();
 	}
 
-	// builder.between(rootObjeto.get(Objeto_.fecha), fechaInicio, fechaFin);
-
 	// Consulta CriteriaQuery
 	public List<JugadorModel> buscarEntreFechas(Date fechaIn, Date fechaFin) {
 
@@ -258,7 +257,7 @@ public class JugadorServiceImp implements JugadorService {
 		List<JugadorModel> golesJugadores = query.getResultList();
 		return golesJugadores;
 	}
-
+	
 	// Consulta JPQL con dos parametros
 	public List<JugadorModel> filtrarPorAltura(int alturaIn, int alturaFin) {
 
@@ -267,5 +266,6 @@ public class JugadorServiceImp implements JugadorService {
 		List<JugadorModel> activoAlturaJugadores = q.getResultList();
 		return activoAlturaJugadores;
 	}
+	
 
 }

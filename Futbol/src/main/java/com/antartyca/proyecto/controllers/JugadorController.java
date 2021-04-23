@@ -1,8 +1,13 @@
 package com.antartyca.proyecto.controllers;
 
+import java.io.IOException;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +32,7 @@ import com.antartyca.proyecto.model.EquipoModel;
 import com.antartyca.proyecto.model.JugadorModel;
 import com.antartyca.proyecto.model.JugadorSearchRequestModel;
 import com.antartyca.proyecto.services.JugadorService;
+import com.antartyca.proyecto.servicesImp.JugadorExcelExporter;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -135,4 +141,24 @@ public class JugadorController {
 		jugadores = jugadorServ.filtrarPorAltura(alturaIn, alturaFin);
 		return jugadores;
 	}
+	
+	//<a th:href="/@{/busquedaPorGoles/{goles}/export/excel}">Export to Excel</a>
+	
+	//Generar Excel de una consulta
+	 @GetMapping("/busquedaPorGoles/{goles}/export/excel")
+	    public void exportToExcel(HttpServletResponse response, @PathVariable(value = "goles") int goles) throws IOException {
+	        response.setContentType("application/octet-stream");
+	        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+	        String currentDateTime = dateFormatter.format(new Date(2021-4-22));
+	         
+	        String headerKey = "Content-Disposition";
+	        String headerValue = "attachment; filename=jugadores_" + currentDateTime + ".xlsx";
+	        response.setHeader(headerKey, headerValue);
+	         
+	        List<JugadorModel> listJugadores = jugadorServ.busquedaPorGoles(goles);
+	         
+	        JugadorExcelExporter excelExporter = new JugadorExcelExporter(listJugadores);
+	         
+	        excelExporter.export(response);    
+	    }
 }

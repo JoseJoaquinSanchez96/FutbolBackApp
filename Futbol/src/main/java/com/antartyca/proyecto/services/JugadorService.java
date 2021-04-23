@@ -28,4 +28,6 @@ public interface JugadorService {
 	public List<JugadorModel> filtrarPorAltura(int alturaIn, int alturaFin);
 	public List<JugadorModel> buscarEntreFechas(Date fechaIn, Date fechaFin);
 	
+	//public List<JugadorModel> listAll();
+	
 }
